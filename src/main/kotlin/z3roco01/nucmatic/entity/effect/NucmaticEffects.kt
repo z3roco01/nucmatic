@@ -5,6 +5,10 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import z3roco01.nucmatic.Nucmatic
 
+/**
+ * registeration for all the effects in the mod
+ * @since 26/09/2024
+ */
 class NucmaticEffects {
     companion object {
         /**

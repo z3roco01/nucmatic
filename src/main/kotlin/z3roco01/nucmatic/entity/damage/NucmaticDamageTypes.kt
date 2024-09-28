@@ -6,6 +6,7 @@ import z3roco01.nucmatic.Nucmatic
 
 /**
  * holds all the damage types for this mod
+ * @since 27/09/2024
  */
 class NucmaticDamageTypes {
     companion object {

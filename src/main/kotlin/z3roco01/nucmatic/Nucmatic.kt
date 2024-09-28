@@ -7,7 +7,7 @@ import z3roco01.nucmatic.entity.effect.NucmaticEffects
 
 /**
  * the common entry point ran on both the client and server
- * @since 2024/09/26
+ * @since 26/09/2024
  */
 object Nucmatic : ModInitializer {
 	val MOD_ID = "nucmatic"

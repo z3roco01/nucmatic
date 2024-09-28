@@ -1,22 +1,15 @@
 package z3roco01.nucmatic.entity.effect
 
-import com.mojang.authlib.minecraft.client.MinecraftClient
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributes
-import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.entity.effect.StatusEffectCategory
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.server.MinecraftServer
-import net.minecraft.world.World
-import sun.font.AttributeValues
 import z3roco01.nucmatic.Nucmatic
-import z3roco01.nucmatic.entity.damage.NucmaticDamageTypes
 
 /**
  * The status effect that gets applied when the player has radiation poisoning
- * @since 2024/09/26
+ * @since 26/09/2024
  */
 class RadiationPoisoningEffect: StatusEffect(StatusEffectCategory.HARMFUL, 0x2CFA1F) {
     var healthRemoveAmount = 0

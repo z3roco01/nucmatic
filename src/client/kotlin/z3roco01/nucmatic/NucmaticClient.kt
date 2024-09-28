@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory
 
 /**
  * The client side entry point for this mod
- * @since 2024/09/26
+ * @since 26/09/2024
  */
 object NucmaticClient : ClientModInitializer {
 	// client version of the logger, just for better debugging
