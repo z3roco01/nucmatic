@@ -3,6 +3,7 @@ package z3roco01.nucmatic
 import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
 import org.slf4j.LoggerFactory
+import z3roco01.nucmatic.block.NucmaticBlocks
 import z3roco01.nucmatic.entity.effect.NucmaticEffects
 import z3roco01.nucmatic.item.NucmaticItems
 
@@ -11,11 +12,12 @@ import z3roco01.nucmatic.item.NucmaticItems
  * @since 26/09/2024
  */
 object Nucmatic : ModInitializer {
-	val MOD_ID = "nucmatic"
+	const val MOD_ID = "nucmatic"
     val LOGGER = LoggerFactory.getLogger(MOD_ID)
 
 	override fun onInitialize() {
 		// register all the things
+		NucmaticBlocks.register()
 		NucmaticEffects.register()
 		NucmaticItems.register()
 
@@ -24,8 +26,8 @@ object Nucmatic : ModInitializer {
 
 	/**
 	 * makes an [Identifier] in the [MOD_ID] namespace
-	 * @param name the name of the id
+	 * @param path the path of the id
 	 * @return the fully made [Identifier]
 	 */
-	fun mkId(name: String) = Identifier.of(MOD_ID, name)
+	fun mkId(path: String) = Identifier.of(MOD_ID, path)
 }

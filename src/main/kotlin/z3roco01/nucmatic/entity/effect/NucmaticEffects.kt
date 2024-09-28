@@ -9,19 +9,17 @@ import z3roco01.nucmatic.Nucmatic
  * registeration for all the effects in the mod
  * @since 26/09/2024
  */
-class NucmaticEffects {
-    companion object {
-        /**
-         * registers all the effects in the mod
-         */
-        fun register() {
-            register("radiation_poisoning", RadiationPoisoningEffect())
-        }
-
-        /**
-         * helper function to make it a bit easier
-         */
-        private fun register(id: String, effect: StatusEffect) = Registry.register(Registries.STATUS_EFFECT,
-            Nucmatic.mkId(id), effect)
+object NucmaticEffects {
+    /**
+     * registers all the effects in the mod
+     */
+    fun register() {
+        register("radiation_poisoning", RadiationPoisoningEffect())
     }
+
+    /**
+     * helper function to make it a bit easier
+     */
+    private fun register(path: String, effect: StatusEffect) = Registry.register(Registries.STATUS_EFFECT,
+        Nucmatic.mkId(path), effect)
 }

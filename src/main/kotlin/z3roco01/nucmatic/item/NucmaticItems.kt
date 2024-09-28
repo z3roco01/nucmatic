@@ -1,6 +1,7 @@
 package z3roco01.nucmatic.item
 
 import net.minecraft.item.Item
+import net.minecraft.item.Item.Settings
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import z3roco01.nucmatic.Nucmatic
@@ -9,23 +10,30 @@ import z3roco01.nucmatic.Nucmatic
  * registration for all the items in this mod
  * @since 27/09/2024
  */
-class NucmaticItems {
-    companion object {
-        // all the items in the mod
-        val STEM_CELL = StemCellItem()
+object NucmaticItems {
+    // all the items in the mod
+    val STEM_CELL = StemCellItem()
+    val RAW_URANIUM = Item(Settings())
+    // uranium fuel is enrich in the isotope uranium-235
+    val NU_FUEL = Item(Settings()) // natural uranium fuel, used in some reactors
+    val LEU_FUEL = Item(Settings()) // low enriched uranium fuel, used in reactors
+    val HEU_FUEL = Item(Settings()) // high enriched uranium fuel, used in weapons
 
-        /**
-         * called to register all the items
-         */
-        fun register() {
-            register("stem_cell", STEM_CELL)
-        }
-
-        /**
-         * helper method for registration
-         * @param id the id of the item
-         * @param item the item
-         */
-        private fun register(id: String, item: Item) = Registry.register(Registries.ITEM, Nucmatic.mkId(id), item)
+    /**
+     * called to register all the items
+     */
+    fun register() {
+        register("stem_cell", STEM_CELL)
+        register("raw_uranium", RAW_URANIUM)
+        register("nu_fuel", NU_FUEL)
+        register("leu_fuel", LEU_FUEL)
+        register("heu_fuel", HEU_FUEL)
     }
+
+    /**
+     * helper method for registration
+     * @param path the path for the id of the item
+     * @param item the item
+     */
+    private fun register(path: String, item: Item) = Registry.register(Registries.ITEM, Nucmatic.mkId(path), item)
 }
