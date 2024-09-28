@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
 import org.slf4j.LoggerFactory
 import z3roco01.nucmatic.entity.effect.NucmaticEffects
+import z3roco01.nucmatic.item.NucmaticItems
 
 /**
  * the common entry point ran on both the client and server
@@ -16,6 +17,7 @@ object Nucmatic : ModInitializer {
 	override fun onInitialize() {
 		// register all the things
 		NucmaticEffects.register()
+		NucmaticItems.register()
 
 		LOGGER.info("init finished !!")
 	}

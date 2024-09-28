@@ -12,31 +12,44 @@ import z3roco01.nucmatic.Nucmatic
  * @since 26/09/2024
  */
 class RadiationPoisoningEffect: StatusEffect(StatusEffectCategory.HARMFUL, 0x2CFA1F) {
-    var healthRemoveAmount = 0
-    var tickCounter = 0
-    var RADIATION_POISONING_ATTRIBUTE_MODIFIER =
-        EntityAttributeModifier(Nucmatic.mkId("radiation_poisoning"), -1.0, EntityAttributeModifier.Operation.ADD_VALUE)
+    companion object {
+        // id used in the attribute modifier
+        val RADIATION_POISONING_MODIFIER_ID = Nucmatic.mkId("radiation_poisoning")
+    }
 
-    // is called every tick, checks if the effect can be applied
-    // set to true so it will always be applicable
-    // public static final RegistryKey<DamageType> TATER_DAMAGE = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of("fabric-docs-reference", "tater"));
-    override fun canApplyUpdateEffect(duration: Int, amplifier: Int) = true
+    private var healthRemoveAmount = 0
+
+    // is called every tick on client and server, if true then it continues to applyUpdateEffect
+    // returns true every 20 ticks which is each second
+    override fun canApplyUpdateEffect(duration: Int, amplifier: Int) = duration % 20 == 0
 
     // called to update the effect, gets called every tick
     // decreases max health by 1 * amplifier per tick
     override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int): Boolean {
-        tickCounter++
+        // dont run the on the client
+        if(entity.world.isClient) return true
+
+        // if the entity does not have the modifier
+        // ( they wont if the player just ate a stem cell or smth else removed it )
+       if(!entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)!!.hasModifier(RADIATION_POISONING_MODIFIER_ID)) {
+           // then reset the amount of health to remove
+           // if we didnt itd remove too much health
+           healthRemoveAmount = 0
+        }
+
         // get max health
         val maxHealth = entity.getAttributeValue(EntityAttributes.GENERIC_MAX_HEALTH)
         // if there is health to remove, remove it
-        if(maxHealth > 1 && tickCounter % 20 == 0) {
-            entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)!!.removeModifier(RADIATION_POISONING_ATTRIBUTE_MODIFIER)
+        if(maxHealth > 1) {
+            // remove previous modifier
+            entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)!!.removeModifier(
+                RADIATION_POISONING_MODIFIER_ID)
+            // increase health remove amount
             healthRemoveAmount += 1*amplifier
-            Nucmatic.LOGGER.info(healthRemoveAmount.toString())
-            RADIATION_POISONING_ATTRIBUTE_MODIFIER = EntityAttributeModifier(Nucmatic.mkId("radiation_poisoning"),
-                healthRemoveAmount * -1.0, EntityAttributeModifier.Operation.ADD_VALUE)
-            entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)!!.addPersistentModifier(RADIATION_POISONING_ATTRIBUTE_MODIFIER)
-            tickCounter = 0
+            // create apply the modiifer
+            entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)!!.addPersistentModifier(
+                EntityAttributeModifier(RADIATION_POISONING_MODIFIER_ID,
+                    healthRemoveAmount * -1.0, EntityAttributeModifier.Operation.ADD_VALUE))
         }
 
         return true
