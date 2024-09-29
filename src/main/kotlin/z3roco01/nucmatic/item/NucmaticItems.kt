@@ -15,9 +15,9 @@ object NucmaticItems {
     val STEM_CELL = StemCellItem()
     val RAW_URANIUM = Item(Settings())
     // uranium fuel is enrich in the isotope uranium-235
-    val NU_FUEL = Item(Settings()) // natural uranium fuel, used in some reactors
-    val LEU_FUEL = Item(Settings()) // low enriched uranium fuel, used in reactors
-    val HEU_FUEL = Item(Settings()) // high enriched uranium fuel, used in weapons
+    val NU_FUEL  = RadioactiveItem(0.01f, 1, (20..40), Settings()) // natural uranium fuel, used in some reactors
+    val LEU_FUEL = RadioactiveItem(0.02f, 1, (20..80), Settings()) // low enriched uranium fuel, used in reactors
+    val HEU_FUEL = RadioactiveItem(0.04f, 2, (20..80), Settings()) // high enriched uranium fuel, used in weapons
 
     /**
      * called to register all the items

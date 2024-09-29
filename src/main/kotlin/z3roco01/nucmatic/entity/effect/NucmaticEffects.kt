@@ -10,11 +10,10 @@ import z3roco01.nucmatic.Nucmatic
  * @since 26/09/2024
  */
 object NucmaticEffects {
-    /**
-     * registers all the effects in the mod
-     */
+    val RADIATION_POISONING_EFFECT = RadiationPoisoningEffect()
+
     fun register() {
-        register("radiation_poisoning", RadiationPoisoningEffect())
+        register("radiation_poisoning", RADIATION_POISONING_EFFECT)
     }
 
     /**

@@ -26,7 +26,6 @@ class RadiationPoisoningEffect: StatusEffect(StatusEffectCategory.HARMFUL, 0x2CF
     override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int): Boolean {
         // dont run the on the client
         if(entity.world.isClient) return true
-        println("as")
 
         // get max health
         val maxHealth = entity.getAttributeValue(EntityAttributes.GENERIC_MAX_HEALTH)
