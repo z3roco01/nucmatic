@@ -39,14 +39,14 @@ class RadiationPoisoningEffect: StatusEffect(StatusEffectCategory.HARMFUL, 0x2CF
                     RADIATION_POISONING_MODIFIER_ID)!!.value
 
                 // then remove the modifier
-                removeModifier(entity)
+                removeHealthModifier(entity)
 
                 // and readd the modifier with the decreased health amount
-                applyModifier(entity, value - amplifier)
+                applyHealthModifier(entity, value - amplifier)
             }else {
                 // if the player does not yet have health removed from radiation poisoning
                 // then remove amplifier hearts
-                applyModifier(entity, amplifier * -1.0)
+                applyHealthModifier(entity, amplifier * -1.0)
             }
         }
 
@@ -57,7 +57,7 @@ class RadiationPoisoningEffect: StatusEffect(StatusEffectCategory.HARMFUL, 0x2CF
      * removes the attribute modifier
      * @param entity the entity the modifier is on
      */
-    private fun removeModifier(entity: LivingEntity) {
+    private fun removeHealthModifier(entity: LivingEntity) {
         entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)!!.removeModifier(
             RADIATION_POISONING_MODIFIER_ID)
     }
@@ -67,7 +67,7 @@ class RadiationPoisoningEffect: StatusEffect(StatusEffectCategory.HARMFUL, 0x2CF
      * @param entity the entity this applies to
      * @param value the value for the modifier
      */
-    private fun applyModifier(entity: LivingEntity, value: Double) {
+    private fun applyHealthModifier(entity: LivingEntity, value: Double) {
         entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)!!.addPersistentModifier(
             EntityAttributeModifier(RADIATION_POISONING_MODIFIER_ID,
                 value, EntityAttributeModifier.Operation.ADD_VALUE))
