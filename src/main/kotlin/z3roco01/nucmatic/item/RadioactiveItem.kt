@@ -24,7 +24,8 @@ class RadioactiveItem(val chance: Float, val amplifier: Int, val duration: IntRa
 
         // roll a random float between 0 and 1, if it is equal to or smaller than the chance, then the roll succeeded
         // but only do logic if the entity doesnt also already have radiation poisoning
-        if(world.random.nextFloat() <= chance && !entity.hasStatusEffect(Registries.STATUS_EFFECT.getEntry(NucmaticEffects.RADIATION_POISONING_EFFECT))) {
+        if(world.random.nextFloat() <= chance &&
+            !entity.hasStatusEffect(Registries.STATUS_EFFECT.getEntry(NucmaticEffects.RADIATION_POISONING_EFFECT))) {
             // apply the effect with the amplifier supplied and a random number from the range
             entity.addStatusEffect(StatusEffectInstance(
                 Registries.STATUS_EFFECT.getEntry(NucmaticEffects.RADIATION_POISONING_EFFECT),

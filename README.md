@@ -5,3 +5,4 @@ A minecraft fabric 1.21+ that adds nuclear power and bombs.
 - irradiated wood ( green )
 - uranium enrichment process
 - hazmat suit ( protects against radiation, maybe with an x chance )
+- uranium generators
