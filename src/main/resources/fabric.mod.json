@@ -29,7 +29,7 @@
 		],
 		"fabric-datagen": [
 			{
-				"value": "z3roco01.nucmatic.NucmaticDataGenerator",
+				"value": "z3roco01.nucmatic.datagen.NucmaticDataGenerator",
 				"adapter": "kotlin"
 			}
 		]

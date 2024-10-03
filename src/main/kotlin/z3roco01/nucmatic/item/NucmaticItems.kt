@@ -1,6 +1,5 @@
 package z3roco01.nucmatic.item
 
-import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.Item
@@ -23,13 +22,13 @@ object NucmaticItems {
     val HEU_FUEL = RadioactiveItem(0.009f, 2, (20..80), Settings()) // high enriched uranium fuel, used in weapons
     // hazmat armour items
     val HAZMAT_HELMET     = EffectArmourItem(NucmaticArmourMaterials.HAZMAT_ARMOR, ArmorItem.Type.HELMET, Settings()
-        .maxDamage(ArmorItem.Type.HELMET.getMaxDamage(15)), StatusEffectInstance(StatusEffects.SLOWNESS))
-    val HAZMAT_CHESTPLATE = ArmorItem(NucmaticArmourMaterials.HAZMAT_ARMOR, ArmorItem.Type.CHESTPLATE, Settings()
-        .maxDamage(ArmorItem.Type.CHESTPLATE.getMaxDamage(15)))
-    val HAZMAT_LEGGINGS   = ArmorItem(NucmaticArmourMaterials.HAZMAT_ARMOR, ArmorItem.Type.LEGGINGS, Settings()
-        .maxDamage(ArmorItem.Type.LEGGINGS.getMaxDamage(15)))
-    val HAZMAT_BOOTS      = ArmorItem(NucmaticArmourMaterials.HAZMAT_ARMOR, ArmorItem.Type.BOOTS, Settings()
-        .maxDamage(ArmorItem.Type.BOOTS.getMaxDamage(15)))
+        .maxDamage(ArmorItem.Type.HELMET.getMaxDamage(15)), StatusEffects.SLOWNESS)
+    val HAZMAT_CHESTPLATE = EffectArmourItem(NucmaticArmourMaterials.HAZMAT_ARMOR, ArmorItem.Type.CHESTPLATE, Settings()
+        .maxDamage(ArmorItem.Type.CHESTPLATE.getMaxDamage(15)), StatusEffects.SLOWNESS)
+    val HAZMAT_LEGGINGS   = EffectArmourItem(NucmaticArmourMaterials.HAZMAT_ARMOR, ArmorItem.Type.LEGGINGS, Settings()
+        .maxDamage(ArmorItem.Type.LEGGINGS.getMaxDamage(15)), StatusEffects.SLOWNESS)
+    val HAZMAT_BOOTS      = EffectArmourItem(NucmaticArmourMaterials.HAZMAT_ARMOR, ArmorItem.Type.BOOTS, Settings()
+        .maxDamage(ArmorItem.Type.BOOTS.getMaxDamage(15)), StatusEffects.SLOWNESS)
 
     /**
      * called to register all the items

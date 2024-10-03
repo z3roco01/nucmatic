@@ -1,4 +1,4 @@
-package z3roco01.nucmatic
+package z3roco01.nucmatic.datagen
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
