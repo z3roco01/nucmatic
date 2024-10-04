@@ -1,11 +1,16 @@
 package z3roco01.nucmatic.item
 
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.Item
 import net.minecraft.item.Item.Settings
+import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
+import net.minecraft.registry.RegistryKey
+import net.minecraft.text.Text
 import z3roco01.nucmatic.Nucmatic
 
 /**
@@ -30,6 +35,13 @@ object NucmaticItems {
     val HAZMAT_BOOTS      = EffectArmourItem(NucmaticArmourMaterials.HAZMAT_ARMOR, ArmorItem.Type.BOOTS, Settings()
         .maxDamage(ArmorItem.Type.BOOTS.getMaxDamage(15)), StatusEffects.SLOWNESS)
 
+    // create a registry key for the item group
+    val NUCMATIC_ITEM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), Nucmatic.mkId("item_group"))
+    // make the actual item group
+    val NUCMATIC_ITEM_GROUP = FabricItemGroup.builder()
+        .icon{ ItemStack(HEU_FUEL) }
+        .displayName(Text.translatable("itemGroup.nucmatic"))
+        .build()
     /**
      * called to register all the items
      */
@@ -43,6 +55,21 @@ object NucmaticItems {
         register("hazmat_chestplate", HAZMAT_CHESTPLATE)
         register("hazmat_leggings", HAZMAT_LEGGINGS)
         register("hazmat_boots", HAZMAT_BOOTS)
+
+        // register the item group
+        Registry.register(Registries.ITEM_GROUP, NUCMATIC_ITEM_GROUP_KEY, NUCMATIC_ITEM_GROUP)
+        // add the items to the group, will be in the specified order
+        ItemGroupEvents.modifyEntriesEvent(NUCMATIC_ITEM_GROUP_KEY).register{itemGroup ->
+            itemGroup.add(RAW_URANIUM)
+            itemGroup.add(NU_FUEL)
+            itemGroup.add(LEU_FUEL)
+            itemGroup.add(HEU_FUEL)
+            itemGroup.add(STEM_CELL)
+            itemGroup.add(HAZMAT_HELMET)
+            itemGroup.add(HAZMAT_CHESTPLATE)
+            itemGroup.add(HAZMAT_LEGGINGS)
+            itemGroup.add(HAZMAT_BOOTS)
+        }
     }
 
     /**
