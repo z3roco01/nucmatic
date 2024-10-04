@@ -3,6 +3,7 @@ package z3roco01.nucmatic.item
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.effect.StatusEffectInstance
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
@@ -21,6 +22,9 @@ class RadioactiveItem(val chance: Float, val amplifier: Int, val duration: IntRa
     override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
         // dont run on client or if its not a LivingEntity
         if(world.isClient || entity !is LivingEntity) return
+
+        // do not give the player radiation poisoning if they are in creative or spectator
+        if(entity is PlayerEntity && (entity.isCreative || entity.isSpectator)) return
 
         // roll a random float between 0 and 1, if it is equal to or smaller than the chance, then the roll succeeded
         // but only do logic if the entity doesnt also already have radiation poisoning
