@@ -7,6 +7,10 @@ import net.minecraft.data.client.ItemModelGenerator
 import net.minecraft.data.client.Models
 import z3roco01.nucmatic.item.NucmaticItems
 
+/**
+ * data generator for most block + all item models
+ * @since 04/10/2024
+ */
 class NucmaticModelProvider(dataOutput: FabricDataOutput): FabricModelProvider(dataOutput) {
     override fun generateBlockStateModels(blockStateModelGenerator: BlockStateModelGenerator) {
     }

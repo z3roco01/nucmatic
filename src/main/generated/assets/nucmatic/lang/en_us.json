@@ -1,0 +1,15 @@
+{
+  "block.nucmatic.deepslate_uranium_ore": "Deepslate Uranium Ore",
+  "block.nucmatic.uranium_ore": "Uranium Ore",
+  "effect.nucmatic.radiation_poisoning": "Radiation Poisoning",
+  "item.nucmatic.hazmat_boots": "Hazmat Boots",
+  "item.nucmatic.hazmat_chestplate": "Hazmat Chestplate",
+  "item.nucmatic.hazmat_helmet": "Hazmat Helmet",
+  "item.nucmatic.hazmat_leggings": "Hazmat Leggings",
+  "item.nucmatic.heu_fuel": "HEU Fuel",
+  "item.nucmatic.leu_fuel": "LEU Fuel",
+  "item.nucmatic.nu_fuel": "NU Fuel",
+  "item.nucmatic.raw_uranium": "Raw Uranium",
+  "item.nucmatic.stem_cell": "Stem Cell",
+  "itemGroup.nucmatic": "Nucmatic"
+}

@@ -10,6 +10,8 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 object NucmaticDataGenerator : DataGeneratorEntrypoint {
 	override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
 		val pack = fabricDataGenerator.createPack()
+		
 		pack.addProvider(::NucmaticModelProvider)
+		pack.addProvider(::NucmaticEnglishLanguageProvider)
 	}
 }
