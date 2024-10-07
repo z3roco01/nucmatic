@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
 import org.slf4j.LoggerFactory
 import z3roco01.nucmatic.block.NucmaticBlocks
+import z3roco01.nucmatic.block.entity.NucmaticBlockEntityTypes
 import z3roco01.nucmatic.entity.effect.NucmaticEffects
 import z3roco01.nucmatic.item.NucmaticItems
 
@@ -18,6 +19,7 @@ object Nucmatic : ModInitializer {
 	override fun onInitialize() {
 		// register all the things
 		NucmaticBlocks.register()
+		NucmaticBlockEntityTypes.register()
 		NucmaticEffects.register()
 		NucmaticItems.register()
 

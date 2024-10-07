@@ -15,8 +15,9 @@ import z3roco01.nucmatic.Nucmatic
  */
 object NucmaticBlocks {
     // all the blocks in the mod
-    val URANIUM_ORE = Block(Settings.copy(Blocks.IRON_ORE))
+    val URANIUM_ORE           = Block(Settings.copy(Blocks.IRON_ORE))
     val DEEPSLATE_URANIUM_ORE = Block(Settings.copy(Blocks.IRON_ORE))
+    val NUCLEAR_GENERATOR    = NuclearGeneratorBlock()
 
     /**
      * registers all the blocks for this mod
@@ -24,6 +25,7 @@ object NucmaticBlocks {
     fun register() {
         register("uranium_ore", URANIUM_ORE)
         register("deepslate_uranium_ore", DEEPSLATE_URANIUM_ORE)
+        register("nuclear_generator", NUCLEAR_GENERATOR)
     }
 
     /**
