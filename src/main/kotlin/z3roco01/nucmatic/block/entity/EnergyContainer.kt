@@ -130,8 +130,8 @@ abstract class EnergyContainer(type: BlockEntityType<*>, pos: BlockPos, state: B
     }
 
     /**
-     * sets the energy stored to the supplied amount
-     * @param amount the amount that it is being set it ( it will not go above capacity )
+     * sets the energy stored to the supplied amount, will not exceed the capacity
+     * @param amount the amount that it is being set it
      */
     fun setEnergy(amount: Long) {
         // set the amount ( make sure it never goes above the capacity ), and mark the block entity as dirty
@@ -146,6 +146,10 @@ abstract class EnergyContainer(type: BlockEntityType<*>, pos: BlockPos, state: B
      */
     fun getEnergy() = energyStorage.amount
 
+    /**
+     * increments the stored energy by the supplied amount, will not exceed the capacity
+     * @param amount the amount that the energy will be incremented by
+     */
     fun incrementEnergy(amount: Long) {
         // get the energy and add the amount, also keep it in check with the capacity
         setEnergy(getEnergy() + amount)
@@ -157,18 +161,22 @@ abstract class EnergyContainer(type: BlockEntityType<*>, pos: BlockPos, state: B
      */
     fun decrementEnergy(amount: Long) = setEnergy(max(getEnergy() - amount, 0))
 
+    // reads the blocks energy amount from the nbt
     override fun readNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
         super.readNbt(nbt, registryLookup)
         // extract all information abt energy from the nbt
         val nbtData = nbt.get(ENERGY_DATA_KEY) as NbtCompound
-        this.energyStorage.amount = min(nbtData.getLong(AMOUNT_ENERGY_KEY), ENERGY_CAPACITY) // make sure the amount of energy doesnt exceed the max
+        // set the stored energy
+        setEnergy(nbtData.getLong(AMOUNT_ENERGY_KEY))
         syncEnergy()
     }
 
+    // writes the stored energy amount into the blocks nbt
     override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
         super.writeNbt(nbt, registryLookup)
         // store all information abt energy in the nbt
         val nbtData = NbtCompound()
+        // store the energy
         nbtData.putLong(AMOUNT_ENERGY_KEY, energyStorage.amount)
         nbt.put(ENERGY_DATA_KEY, nbtData)
     }
@@ -180,7 +188,7 @@ abstract class EnergyContainer(type: BlockEntityType<*>, pos: BlockPos, state: B
     }
 
     /**
-     * an enum for energy permissions
+     * the enum for energy permissions
      */
     enum class IOPermission {
         NONE, // used when insertion and extraction cannot happen on a side
