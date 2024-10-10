@@ -3,6 +3,7 @@ package z3roco01.nucmatic.block.entity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
+import team.reborn.energy.api.EnergyStorage
 import z3roco01.nucmatic.Nucmatic
 import z3roco01.nucmatic.block.NucmaticBlocks
 
@@ -19,7 +20,17 @@ object NucmaticBlockEntityTypes {
      * called to register all the block entity types
      */
     fun register() {
-        register("nuclear_generator", NUCLEAR_GENERATOR_TYPE)
+        registerEnergyContainer("nuclear_generator", NUCLEAR_GENERATOR_TYPE)
+    }
+
+    /**
+     * registers an energy container block entity, registers both the type and the entity as an energy storing block
+     * @param path the path of the id
+     * @param type the [BlockEntityType] of the block
+     */
+    private fun registerEnergyContainer(path: String, type: BlockEntityType<out EnergyContainer>) {
+        register(path, type)
+        EnergyStorage.SIDED.registerForBlockEntity({blockEntity, direction -> blockEntity.energyStorage.getSideStorage(direction)}, type)
     }
 
     /**

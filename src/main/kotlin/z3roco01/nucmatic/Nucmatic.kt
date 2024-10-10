@@ -7,6 +7,7 @@ import z3roco01.nucmatic.block.NucmaticBlocks
 import z3roco01.nucmatic.block.entity.NucmaticBlockEntityTypes
 import z3roco01.nucmatic.entity.effect.NucmaticEffects
 import z3roco01.nucmatic.item.NucmaticItems
+import z3roco01.nucmatic.network.NucmaticServerPayloads
 
 /**
  * the common entry point ran on both the client and server
@@ -22,6 +23,7 @@ object Nucmatic : ModInitializer {
 		NucmaticBlockEntityTypes.register()
 		NucmaticEffects.register()
 		NucmaticItems.register()
+		NucmaticServerPayloads.register()
 
 		LOGGER.info("init finished !!")
 	}
