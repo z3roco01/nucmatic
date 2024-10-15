@@ -3,6 +3,7 @@ package z3roco01.nucmatic
 import net.fabricmc.api.ClientModInitializer
 import org.slf4j.LoggerFactory
 import z3roco01.nucmatic.network.NucmaticClientPayloads
+import z3roco01.nucmatic.screen.NucmaticScreens
 
 /**
  * The client side entry point for this mod
@@ -14,6 +15,7 @@ object NucmaticClient : ClientModInitializer {
 
 	override fun onInitializeClient() {
 		NucmaticClientPayloads.register()
+		NucmaticScreens.register()
 
 		LOGGER.info("client init finished !!")
 	}

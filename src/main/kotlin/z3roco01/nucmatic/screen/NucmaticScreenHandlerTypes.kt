@@ -18,12 +18,12 @@ object NucmaticScreenHandlerTypes {
      * registers all the types
      */
     fun register() {
-
+        register("nuclear_generator", NUCLEAR_GENERATOR_TYPE)
     }
 
     /**
      * helper fun for registration
      */
     private fun register(path: String, type: ScreenHandlerType<*>) = Registry.register(Registries.SCREEN_HANDLER,
-        Nucmatic.mkId(path))
+        Nucmatic.mkId(path), type)
 }
