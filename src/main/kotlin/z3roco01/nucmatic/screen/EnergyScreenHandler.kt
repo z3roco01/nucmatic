@@ -8,6 +8,7 @@ import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerType
+import net.minecraft.screen.slot.Slot
 import net.minecraft.util.math.BlockPos
 import z3roco01.nucmatic.block.entity.EnergyContainer
 
@@ -41,6 +42,30 @@ abstract class EnergyScreenHandler(type: ScreenHandlerType<*>, syncId: Int, play
 
     // returns if a player can open this inventory
     override fun canUse(player: PlayerEntity) = true
+
+    /**
+     * adds all the required slots for the players inventory, including hotbar.
+     * should be called in the constructor of a sub class
+     */
+    protected fun addPlayerInventory(playerInv: PlayerInventory) {
+        // add every inventory slot
+        for (i in 0..2) {
+            for (l in 0..8) {
+                this.addSlot(Slot(playerInv, l + i * 9 + 9, 8 + l * 18, 84 + i * 18))
+            }
+        }
+
+        addHotbar(playerInv)
+    }
+
+    /**
+     * adds the slots for the players hotbar
+     */
+    protected fun addHotbar(playerInv: PlayerInventory) {
+        for (i in 0..8) {
+            this.addSlot(Slot(playerInv, i, 8 + i * 18, 142))
+        }
+    }
 
     /**
      * holds the data passed to this screen handler from the block
