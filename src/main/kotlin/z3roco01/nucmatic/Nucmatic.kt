@@ -8,6 +8,7 @@ import z3roco01.nucmatic.block.entity.NucmaticBlockEntityTypes
 import z3roco01.nucmatic.entity.effect.NucmaticEffects
 import z3roco01.nucmatic.item.NucmaticItems
 import z3roco01.nucmatic.network.NucmaticServerPayloads
+import z3roco01.nucmatic.screen.NucmaticScreenHandlerTypes
 
 /**
  * the common entry point ran on both the client and server
@@ -19,6 +20,7 @@ object Nucmatic : ModInitializer {
 
 	override fun onInitialize() {
 		// register all the things
+		NucmaticScreenHandlerTypes.register()
 		NucmaticBlocks.register()
 		NucmaticBlockEntityTypes.register()
 		NucmaticEffects.register()

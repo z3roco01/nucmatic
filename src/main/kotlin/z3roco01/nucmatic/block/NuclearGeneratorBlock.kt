@@ -1,5 +1,6 @@
 package z3roco01.nucmatic.block
 
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.Block
 import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockState
@@ -8,6 +9,7 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import z3roco01.nucmatic.Nucmatic
 import z3roco01.nucmatic.block.entity.NuclearGeneratorBlockEntity
 
 /**
@@ -19,17 +21,19 @@ class NuclearGeneratorBlock: Block(Settings.create()), BlockEntityProvider {
     override fun createBlockEntity(pos: BlockPos, state: BlockState) = NuclearGeneratorBlockEntity(pos, state)
 
     // called when the player right clicks on this block, will open the screen
-    override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hit: BlockHitResult): ActionResult? {
+    override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hit: BlockHitResult): ActionResult {
         // do not run on the client
         if(world.isClient) return ActionResult.PASS
 
-        // get the factory for the screen handler from the block entity
-        val screenHandlerFactory = state.createScreenHandlerFactory(world, pos)
+        val blockEntity = world.getBlockEntity(pos)
 
-        if (screenHandlerFactory != null) {
-            // if it has a screen handler factory ( it should ) then open the screen for the player
-            player.openHandledScreen(screenHandlerFactory)
-        }
+        // get the factory for the screen handler from the block entity
+        Nucmatic.LOGGER.info(blockEntity.toString())
+        Nucmatic.LOGGER.info((blockEntity is ExtendedScreenHandlerFactory<*>).toString())
+        if(blockEntity !is ExtendedScreenHandlerFactory<*>) return ActionResult.PASS
+
+        val screenHandlerFactory = (blockEntity as ExtendedScreenHandlerFactory<*>)
+        player.openHandledScreen(screenHandlerFactory)
 
         // the action succeeded so return that
         return ActionResult.SUCCESS
