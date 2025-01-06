@@ -30,4 +30,9 @@ class NuclearGeneratorScreen(handler: NuclearGeneratorScreenHandler, playerInv: 
         // render the background texture to the screen with the center coords
         context.drawTexture(BG_TEXTURE, centerX, centerY, 0, 0, this.backgroundWidth, this.backgroundHeight)
     }
+
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        super.render(context, mouseX, mouseY, delta)
+        this.drawMouseoverTooltip(context, mouseX, mouseY)
+    }
 }
