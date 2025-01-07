@@ -15,7 +15,6 @@ import net.minecraft.world.World
 import team.reborn.energy.api.EnergyStorage
 import team.reborn.energy.api.EnergyStorageUtil
 import team.reborn.energy.api.base.SimpleSidedEnergyContainer
-import z3roco01.nucmatic.Nucmatic
 import z3roco01.nucmatic.network.SyncEnergyPayload
 import kotlin.math.max
 import kotlin.math.min
@@ -94,8 +93,6 @@ abstract class EnergyContainer(type: BlockEntityType<*>, pos: BlockPos, state: B
     override fun tick(world: World, pos: BlockPos, state: BlockState, blockEntity: EnergyContainer) {
         // do not run on the client or if it has no energy
         if(world.isClient || getEnergy() <= 0) return
-
-        Nucmatic.LOGGER.info("gdsifji")
 
         // loop over each side
         for(side in Direction.entries) {
@@ -204,6 +201,17 @@ abstract class EnergyContainer(type: BlockEntityType<*>, pos: BlockPos, state: B
         // keys for storage in nbt
         val ENERGY_DATA_KEY = "pragmatica:energy"
         val AMOUNT_ENERGY_KEY = "energy"
+
+        // code ran on every tick, will generate energy if it is possible
+        /**
+         * static ticker called in [net.minecraft.block.BlockWithEntity.getTicker], calls the non static ticker of the block
+         */
+        fun staticTick(world: World, pos: BlockPos, state: BlockState, blockEntity: EnergyContainer) {
+            // do not run this logic on the client
+            if(world.isClient) return
+
+            blockEntity.tick(world, pos, state, blockEntity)
+        }
     }
 
     /**
