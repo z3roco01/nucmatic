@@ -22,9 +22,9 @@ object NucmaticItems {
     val STEM_CELL = StemCellItem()
     val RAW_URANIUM = Item(Settings())
     // uranium fuel is enriched in the isotope uranium-235
-    val NU_FUEL  = NuclearFuelItem(64000, 400, 0.0005f, 1, (20..40)) // natural uranium fuel, used in some reactors
-    val LEU_FUEL = NuclearFuelItem(128000, 600, 0.001f,  1, (20..80)) // low enriched uranium fuel, used in most reactors
-    val HEU_FUEL = NuclearFuelItem(256000, 800, 0.005f,  2, (20..80)) // high enriched uranium fuel, used mostly in weapons
+    val NU_FUEL  = NuclearFuelItem(64000, 50, 0.0005f, 1, (20..40)) // natural uranium fuel, used in some reactors
+    val LEU_FUEL = NuclearFuelItem(128000, 100, 0.001f,  1, (20..80)) // low enriched uranium fuel, used in most reactors
+    val HEU_FUEL = NuclearFuelItem(256000, 300, 0.005f,  2, (20..80)) // high enriched uranium fuel, used mostly in weapons
     // hazmat armour items
     val HAZMAT_HELMET     = EffectArmourItem(NucmaticArmourMaterials.HAZMAT_ARMOR, ArmorItem.Type.HELMET, Settings()
         .maxDamage(ArmorItem.Type.HELMET.getMaxDamage(15)), StatusEffects.SLOWNESS)
