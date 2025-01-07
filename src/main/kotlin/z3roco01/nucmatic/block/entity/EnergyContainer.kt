@@ -15,6 +15,7 @@ import net.minecraft.world.World
 import team.reborn.energy.api.EnergyStorage
 import team.reborn.energy.api.EnergyStorageUtil
 import team.reborn.energy.api.base.SimpleSidedEnergyContainer
+import z3roco01.nucmatic.Nucmatic
 import z3roco01.nucmatic.network.SyncEnergyPayload
 import kotlin.math.max
 import kotlin.math.min
@@ -94,6 +95,8 @@ abstract class EnergyContainer(type: BlockEntityType<*>, pos: BlockPos, state: B
         // do not run on the client or if it has no energy
         if(world.isClient || getEnergy() <= 0) return
 
+        Nucmatic.LOGGER.info("gdsifji")
+
         // loop over each side
         for(side in Direction.entries) {
             // push energy to anything that is accepting energy beside it
@@ -156,10 +159,26 @@ abstract class EnergyContainer(type: BlockEntityType<*>, pos: BlockPos, state: B
     }
 
     /**
+     * increments the stored energy by the supplied amount, will not exceed the capacity
+     * @param amount the amount that the energy will be incremented by
+     */
+    fun incrementEnergy(amount: Int) {
+        incrementEnergy(amount.toLong())
+    }
+
+    /**
      * decrements the energy by the supplied amount, will not let it go bellow 0
      * @param amount the amount that it is being decremented by
      */
     fun decrementEnergy(amount: Long) = setEnergy(max(getEnergy() - amount, 0))
+
+    /**
+     * decrements the energy by the supplied amount, will not let it go bellow 0
+     * @param amount the amount that it is being decremented by
+     */
+    fun decrementEnergy(amount: Int) {
+        decrementEnergy(amount)
+    }
 
     // reads the blocks energy amount from the nbt
     override fun readNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
