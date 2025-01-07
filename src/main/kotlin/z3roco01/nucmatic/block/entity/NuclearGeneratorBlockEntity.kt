@@ -13,6 +13,7 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Direction
 import z3roco01.nucmatic.block.BasicInventory
 import z3roco01.nucmatic.screen.NuclearGeneratorScreenHandler
 import z3roco01.pragmatica.screen.EnergyScreenHandler
@@ -30,13 +31,21 @@ class NuclearGeneratorBlockEntity(pos: BlockPos, state: BlockState):
     // item held by this block, used to store the burning fuel
     private val items = DefaultedList.ofSize(1, ItemStack.EMPTY)
 
+    init {
+        // loop over every direction ...
+        for(i in Direction.entries) {
+            // and set its io permission to extract only
+            sideIOMap[i] = IOPermission.EXTRACT
+        }
+    }
+
     // create the data that will be passed to the screen handler
     override fun getScreenOpeningData(player: ServerPlayerEntity) = EnergyScreenHandler.EnergyContainerScreenData(this.getEnergy(), this.getEnergyCapacity(), pos)
     // returns the display name for the screen
     override fun getDisplayName() = Text.translatable(cachedState.block.translationKey)
     // creates the screen handler
     override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
-        return NuclearGeneratorScreenHandler(syncId, playerInventory, getScreenOpeningData(player as ServerPlayerEntity))
+        return NuclearGeneratorScreenHandler(syncId, playerInventory, getScreenOpeningData(player as ServerPlayerEntity), this)
     }
 
     override fun getItems() = items
@@ -50,6 +59,6 @@ class NuclearGeneratorBlockEntity(pos: BlockPos, state: BlockState):
     // overriden to write the inventory's nbt
     override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup) {
         Inventories.writeNbt(nbt, items, registryLookup)
-        return super.writeNbt(nbt, registryLookup)
+        super.writeNbt(nbt, registryLookup)
     }
 }

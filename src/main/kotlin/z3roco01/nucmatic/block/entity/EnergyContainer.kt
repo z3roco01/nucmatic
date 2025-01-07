@@ -26,7 +26,7 @@ import kotlin.math.min
 abstract class EnergyContainer(type: BlockEntityType<*>, pos: BlockPos, state: BlockState):
     BlockEntity(type, pos, state), BlockEntityTicker<EnergyContainer> {
     // map that has an entry for each block side, determines if energy can be extracted/inserted into it
-    val sideIOMap = mapOf(
+    val sideIOMap = mutableMapOf(
         Direction.DOWN  to IOPermission.INSERT,
         Direction.UP    to IOPermission.INSERT,
         Direction.NORTH to IOPermission.INSERT,

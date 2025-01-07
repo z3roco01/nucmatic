@@ -5,7 +5,9 @@ import net.minecraft.block.Block
 import net.minecraft.block.BlockEntityProvider
 import net.minecraft.block.BlockState
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.screen.ScreenHandler
 import net.minecraft.util.ActionResult
+import net.minecraft.util.ItemScatterer
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -18,6 +20,22 @@ import z3roco01.nucmatic.block.entity.NuclearGeneratorBlockEntity
 class NuclearGeneratorBlock: Block(Settings.create()), BlockEntityProvider {
     // creates the block entity, which handles all ticking, etc logic
     override fun createBlockEntity(pos: BlockPos, state: BlockState) = NuclearGeneratorBlockEntity(pos, state)
+
+    override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
+        // if this block has been replaced with a different type of block
+        if (state.block != newState.block) {
+            // get the block entity
+            val blockEntity = world.getBlockEntity(pos)
+            // ensure the block entity is the correct type
+            if (blockEntity is NuclearGeneratorBlockEntity) {
+                // scatter the items on the ground
+                ItemScatterer.spawn(world, pos, blockEntity)
+                // and update comparators
+                world.updateComparators(pos, this)
+            }
+            super.onStateReplaced(state, world, pos, newState, moved)
+        }
+    }
 
     // called when the player right clicks on this block, will open the screen
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hit: BlockHitResult): ActionResult {
@@ -35,4 +53,10 @@ class NuclearGeneratorBlock: Block(Settings.create()), BlockEntityProvider {
         // the action succeeded so return that
         return ActionResult.SUCCESS
     }
+
+    override fun hasComparatorOutput(state: BlockState) = true
+
+    // calculate the comparator output with a helper function
+    override fun getComparatorOutput(state: BlockState, world: World, pos: BlockPos) =
+        ScreenHandler.calculateComparatorOutput(world.getBlockEntity(pos))
 }
