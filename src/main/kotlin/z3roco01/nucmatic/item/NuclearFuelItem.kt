@@ -1,5 +1,8 @@
 package z3roco01.nucmatic.item
 
+import net.minecraft.component.Component
+import net.minecraft.component.ComponentType
+
 /**
  * class used by all items that are nuclear fuel, inherits [RadioactiveItem], so its properties are in this constructor.<br>
  * for all constructor params see [RadioactiveItem]
@@ -11,6 +14,6 @@ package z3roco01.nucmatic.item
  * @param duration [IntRange] passed to [RadioactiveItem.duration]
  * @param settings [net.minecraft.item.Item.Settings] passed to [RadioactiveItem]
  */
-class NuclearFuelItem(val energyValue: Int, val burnRate: Int, chance: Float, amplifier: Int, duration: IntRange, settings: Settings):
-    RadioactiveItem(chance, amplifier, duration, settings) {
+class NuclearFuelItem(val energyValue: Int, val burnRate: Int, chance: Float, amplifier: Int, duration: IntRange):
+    RadioactiveItem(chance, amplifier, duration, Settings().maxDamage(energyValue).maxCount(1)) {
 }
