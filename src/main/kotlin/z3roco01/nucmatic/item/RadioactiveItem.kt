@@ -18,7 +18,7 @@ import z3roco01.nucmatic.entity.effect.RadiationPoisoningEffect
  * @param amplifier the amplifier used when [RadiationPoisoningEffect] is applied
  * @param settings the item settings for this item
  */
-class RadioactiveItem(val chance: Float, val amplifier: Int, val duration: IntRange, settings: Settings): Item(settings) {
+open class RadioactiveItem(val chance: Float, val amplifier: Int, val duration: IntRange, settings: Settings): Item(settings) {
     override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
         // dont run on client or if its not a LivingEntity
         if(world.isClient || entity !is LivingEntity) return
