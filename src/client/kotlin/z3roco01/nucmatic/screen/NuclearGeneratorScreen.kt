@@ -13,7 +13,7 @@ import z3roco01.nucmatic.Nucmatic
 class NuclearGeneratorScreen(handler: NuclearGeneratorScreenHandler, playerInv: PlayerInventory, title: Text):
     HandledScreen<NuclearGeneratorScreenHandler>(handler, playerInv, title) {
     // identifier for the background texture, hold the path to it
-    val BG_TEXTURE = Nucmatic.mkId("textures/gui/container/nuclear_generator")
+    val BG_TEXTURE = Nucmatic.mkId("textures/gui/container/nuclear_generator.png")
 
     override fun init() {
         super.init()

@@ -8,7 +8,6 @@ import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
-import z3roco01.nucmatic.Nucmatic
 import z3roco01.nucmatic.screen.NuclearGeneratorScreenHandler
 import z3roco01.pragmatica.screen.EnergyScreenHandler
 
@@ -28,7 +27,6 @@ class NuclearGeneratorBlockEntity(pos: BlockPos, state: BlockState):
     override fun getDisplayName() = Text.translatable(cachedState.block.translationKey)
     // creates the screen handler
     override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler? {
-        Nucmatic.LOGGER.info("poooo")
         return NuclearGeneratorScreenHandler(syncId, playerInventory, getScreenOpeningData(player as ServerPlayerEntity))
     }
 }

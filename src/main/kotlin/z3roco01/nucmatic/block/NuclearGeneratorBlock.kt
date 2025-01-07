@@ -9,7 +9,6 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import z3roco01.nucmatic.Nucmatic
 import z3roco01.nucmatic.block.entity.NuclearGeneratorBlockEntity
 
 /**
@@ -28,8 +27,6 @@ class NuclearGeneratorBlock: Block(Settings.create()), BlockEntityProvider {
         val blockEntity = world.getBlockEntity(pos)
 
         // get the factory for the screen handler from the block entity
-        Nucmatic.LOGGER.info(blockEntity.toString())
-        Nucmatic.LOGGER.info((blockEntity is ExtendedScreenHandlerFactory<*>).toString())
         if(blockEntity !is ExtendedScreenHandlerFactory<*>) return ActionResult.PASS
 
         val screenHandlerFactory = (blockEntity as ExtendedScreenHandlerFactory<*>)
