@@ -26,7 +26,7 @@ class NuclearGeneratorBlockEntity(pos: BlockPos, state: BlockState):
     // returns the display name for the screen
     override fun getDisplayName() = Text.translatable(cachedState.block.translationKey)
     // creates the screen handler
-    override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler? {
+    override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
         return NuclearGeneratorScreenHandler(syncId, playerInventory, getScreenOpeningData(player as ServerPlayerEntity))
     }
 }
