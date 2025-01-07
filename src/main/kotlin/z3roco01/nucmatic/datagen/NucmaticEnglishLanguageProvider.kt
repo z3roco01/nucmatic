@@ -28,6 +28,7 @@ class NucmaticEnglishLanguageProvider(fabricDataOutput: FabricDataOutput, regist
         // blocks
         translationBuilder.add(NucmaticBlocks.URANIUM_ORE,           "Uranium Ore")
         translationBuilder.add(NucmaticBlocks.DEEPSLATE_URANIUM_ORE, "Deepslate Uranium Ore")
+        translationBuilder.add(NucmaticBlocks.NUCLEAR_GENERATOR,     "Nuclear Generator")
 
         // misc
         translationBuilder.add("effect.nucmatic.radiation_poisoning", "Radiation Poisoning")

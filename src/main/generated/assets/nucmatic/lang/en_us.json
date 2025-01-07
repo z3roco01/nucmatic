@@ -1,5 +1,6 @@
 {
   "block.nucmatic.deepslate_uranium_ore": "Deepslate Uranium Ore",
+  "block.nucmatic.nuclear_generator": "Nuclear Generator",
   "block.nucmatic.uranium_ore": "Uranium Ore",
   "effect.nucmatic.radiation_poisoning": "Radiation Poisoning",
   "item.nucmatic.hazmat_boots": "Hazmat Boots",
