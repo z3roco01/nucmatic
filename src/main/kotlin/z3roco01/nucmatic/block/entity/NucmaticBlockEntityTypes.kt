@@ -15,12 +15,15 @@ object NucmaticBlockEntityTypes {
     // all the block entity types
     val NUCLEAR_GENERATOR_TYPE = BlockEntityType.Builder.create(::NuclearGeneratorBlockEntity,
         NucmaticBlocks.NUCLEAR_GENERATOR).build()
+    val NUCLEAR_GENERATOR_CONTROLLER_TYPE = BlockEntityType.Builder.create(::NuclearGeneratorControllerBlockEntity,
+        NucmaticBlocks.NUCLEAR_GENERATOR_CONTROLLER).build()
 
     /**
      * called to register all the block entity types
      */
     fun register() {
         registerEnergyContainer("nuclear_generator", NUCLEAR_GENERATOR_TYPE)
+        registerEnergyContainer("generator_controller", NUCLEAR_GENERATOR_CONTROLLER_TYPE)
     }
 
     /**
