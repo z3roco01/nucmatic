@@ -8,7 +8,6 @@ import net.minecraft.item.Item
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import z3roco01.nucmatic.Nucmatic
-import z3roco01.nucmatic.block.entity.NuclearGeneratorControllerBlock
 
 /**
  * contains all the block for this mod
