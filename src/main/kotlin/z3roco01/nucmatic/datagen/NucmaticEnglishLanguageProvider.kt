@@ -33,5 +33,6 @@ class NucmaticEnglishLanguageProvider(fabricDataOutput: FabricDataOutput, regist
         // misc
         translationBuilder.add("effect.nucmatic.radiation_poisoning", "Radiation Poisoning")
         translationBuilder.add("itemGroup.nucmatic", "Nucmatic")
+        translationBuilder.add("item.nucmatic.fuel.tooltip", "Energy Remaining")
     }
 }
