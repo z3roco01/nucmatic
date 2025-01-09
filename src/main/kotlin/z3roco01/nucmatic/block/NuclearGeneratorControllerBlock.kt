@@ -1,4 +1,4 @@
-package z3roco01.nucmatic.block.entity
+package z3roco01.nucmatic.block
 
 import net.minecraft.block.Block
 
