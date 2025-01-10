@@ -5,14 +5,14 @@ import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
 import net.minecraft.block.BlockWithEntity
 import net.minecraft.util.math.BlockPos
-import z3roco01.nucmatic.block.entity.NuclearGeneratorControllerBlockEntity
+import z3roco01.nucmatic.block.entity.ReactorControllerBlockEntity
 
-class NuclearGeneratorControllerBlock: BlockWithEntity(Settings.create()) {
+class ReactorControllerBlock: BlockWithEntity(Settings.create()) {
     // creates the block entity, which handles all ticking, etc logic
-    override fun createBlockEntity(pos: BlockPos, state: BlockState) = NuclearGeneratorControllerBlockEntity(pos, state)
+    override fun createBlockEntity(pos: BlockPos, state: BlockState) = ReactorControllerBlockEntity(pos, state)
 
     // returns a codec for this block
-    override fun getCodec(): MapCodec<out BlockWithEntity> = createCodec{NuclearGeneratorBlock()}
+    override fun getCodec(): MapCodec<out BlockWithEntity> = createCodec{ReactorControllerBlock()}
 
     // getRenderType returns INVISIBLE im BlockWithEntity, so it needs to be overriden
     override fun getRenderType(state: BlockState) = BlockRenderType.MODEL

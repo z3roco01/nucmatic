@@ -7,8 +7,8 @@ import net.minecraft.util.math.BlockPos
  * the block entity for the nuclear generator controller
  * @since 07/10/2024
  */
-class NuclearGeneratorControllerBlockEntity(pos: BlockPos, state: BlockState):
-    EnergyContainer(NucmaticBlockEntityTypes.NUCLEAR_GENERATOR_CONTROLLER_TYPE, pos, state) {
+class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
+    EnergyContainer(NucmaticBlockEntityTypes.REACTOR_CONTROLLER_TYPE, pos, state) {
     override fun getEnergyCapacity() = 1024000L
 
     override fun getMaxIns() = 4000L
