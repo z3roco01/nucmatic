@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
 import net.minecraft.data.client.BlockStateModelGenerator
 import net.minecraft.data.client.ItemModelGenerator
 import net.minecraft.data.client.Models
+import z3roco01.nucmatic.block.NucmaticBlocks
 import z3roco01.nucmatic.item.NucmaticItems
 
 /**
@@ -13,6 +14,10 @@ import z3roco01.nucmatic.item.NucmaticItems
  */
 class NucmaticModelProvider(dataOutput: FabricDataOutput): FabricModelProvider(dataOutput) {
     override fun generateBlockStateModels(blockStateModelGenerator: BlockStateModelGenerator) {
+        blockStateModelGenerator.registerSimpleCubeAll(NucmaticBlocks.URANIUM_ORE)
+        blockStateModelGenerator.registerSimpleCubeAll(NucmaticBlocks.DEEPSLATE_URANIUM_ORE)
+        blockStateModelGenerator.registerSimpleCubeAll(NucmaticBlocks.REACTOR_CASING)
+        blockStateModelGenerator.registerSimpleCubeAll(NucmaticBlocks.REACTOR_GLASS)
     }
 
     override fun generateItemModels(itemModelGenerator: ItemModelGenerator) {
