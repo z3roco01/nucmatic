@@ -207,9 +207,6 @@ abstract class EnergyContainer(type: BlockEntityType<*>, pos: BlockPos, state: B
          * static ticker called in [net.minecraft.block.BlockWithEntity.getTicker], calls the non static ticker of the block
          */
         fun staticTick(world: World, pos: BlockPos, state: BlockState, blockEntity: EnergyContainer) {
-            // do not run this logic on the client
-            if(world.isClient) return
-
             blockEntity.tick(world, pos, state, blockEntity)
         }
     }

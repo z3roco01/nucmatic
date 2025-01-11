@@ -4,7 +4,12 @@ import com.mojang.serialization.MapCodec
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
 import net.minecraft.block.BlockWithEntity
+import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
+import z3roco01.nucmatic.block.entity.EnergyContainer
+import z3roco01.nucmatic.block.entity.NucmaticBlockEntityTypes
 import z3roco01.nucmatic.block.entity.ReactorControllerBlockEntity
 
 class ReactorControllerBlock: BlockWithEntity(Settings.create()) {
@@ -16,4 +21,8 @@ class ReactorControllerBlock: BlockWithEntity(Settings.create()) {
 
     // getRenderType returns INVISIBLE im BlockWithEntity, so it needs to be overriden
     override fun getRenderType(state: BlockState) = BlockRenderType.MODEL
+
+    // returns the ticker for this block entity, so it can run code on each game tick
+    override fun <T : BlockEntity?> getTicker(world: World, state: BlockState, type: BlockEntityType<T>)
+            = validateTicker(type, NucmaticBlockEntityTypes.REACTOR_CONTROLLER_TYPE, EnergyContainer::staticTick)
 }

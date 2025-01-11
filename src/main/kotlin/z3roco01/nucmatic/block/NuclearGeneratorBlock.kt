@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
-import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.screen.ScreenHandler
@@ -47,9 +46,8 @@ class NuclearGeneratorBlock: BlockWithEntity(Settings.create()) {
         }
     }
 
-    override fun <T : BlockEntity?> getTicker(world: World, state: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T>? {
-        return validateTicker(type, NucmaticBlockEntityTypes.NUCLEAR_GENERATOR_TYPE, EnergyContainer::staticTick)
-    }
+    override fun <T : BlockEntity?> getTicker(world: World, state: BlockState, type: BlockEntityType<T>)
+    = validateTicker(type, NucmaticBlockEntityTypes.NUCLEAR_GENERATOR_TYPE, EnergyContainer::staticTick)
 
     // called when the player right clicks on this block, will open the screen
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hit: BlockHitResult): ActionResult {
