@@ -6,6 +6,7 @@ import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
+import z3roco01.nucmatic.Nucmatic
 import z3roco01.nucmatic.tag.NucmaticBlockTags
 
 /**
@@ -37,6 +38,9 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
         // dont run this logic on the client
         if(world.isClient) return
 
+        val asd = findDirection(world, pos)
+        if(asd != Axis.NONE)
+            Nucmatic.LOGGER.info(asd.toString())
     }
 
     /**
@@ -46,12 +50,15 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
      * @return the [Axis] the front wall is on, or [Axis.NONE] if it is not built
      */
     private fun findDirection(world: World, pos: BlockPos): Axis {
-        if(isInAddedPos(world, pos, 1, 0, 0, NucmaticBlockTags.REACTOR_CASING)
-            && isInAddedPos(world, pos, -1, 0, 0, NucmaticBlockTags.REACTOR_CASING))
+        val xPlus = isInAddedPos(world, pos, 1, 0, 0, NucmaticBlockTags.REACTOR_CASING)
+        val xMinus = isInAddedPos(world, pos, -1, 0, 0, NucmaticBlockTags.REACTOR_CASING)
+        val zPlus = isInAddedPos(world, pos, 0, 0, 1, NucmaticBlockTags.REACTOR_CASING)
+        val zMinus = isInAddedPos(world, pos, 0, 0, -1, NucmaticBlockTags.REACTOR_CASING)
+
+        if(xPlus != null && xMinus != null && xPlus && xMinus)
             // if true the front wall is built on the x axis
             return Axis.X_AXIS
-        else if(isInAddedPos(world, pos, 0, 0, 1, NucmaticBlockTags.REACTOR_CASING)
-            && isInAddedPos(world, pos, 0, 0, -1, NucmaticBlockTags.REACTOR_CASING))
+        else if(zPlus != null && zMinus != null && zPlus && zMinus)
             // if true the front wall is built on the z axis
             return Axis.Z_AXIS
 
@@ -68,7 +75,7 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
      * @param tag the tag we are checking against
      */
     private fun isInAddedPos(world: World, pos: BlockPos, x: Int, y: Int, z: Int, tag: TagKey<Block>) =
-        getBlockEntAdd(world, pos, x, y, z).cachedState.isIn(tag)
+        getBlockEntAdd(world, pos, x, y, z)?.cachedState?.isIn(tag)
 
     /**
      * adds the supplied ints to the pos, then gets the block entity at that position
@@ -79,7 +86,7 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
      * @param z the value to be added to the z component
      */
     private fun getBlockEntAdd(world: World, pos: BlockPos, x: Int, y: Int, z: Int) =
-        world.getBlockEntity(pos.add(x, y, z))!!
+        world.getBlockEntity(pos.add(x, y, z))
 
     /**
      * a class used for returns, used to denote an axis in world
