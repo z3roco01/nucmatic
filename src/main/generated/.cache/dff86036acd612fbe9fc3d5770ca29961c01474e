@@ -1,8 +1,8 @@
-// 1.21	2025-01-14T08:45:53.9904536	Nucmatic/Model Definitions
+// 1.21	2025-01-14T09:30:03.1690424	Nucmatic/Model Definitions
 77a44078de2d8de32d3143e826bed68c0cf2d13c assets\nucmatic\models\item\hazmat_leggings.json
 9233e191e2eb314144405742f33ce82dccd8e93b assets\nucmatic\models\block\reactor_casing.json
-6b62152603c0daa4f3a41bb2c1b79efc58e90d6d assets\nucmatic\models\item\uranium_ore.json
 d87cb37e8c2ea8d165d2d1650c8de6221c7d96a8 assets\nucmatic\models\block\nu_fuel_rod.json
+6b62152603c0daa4f3a41bb2c1b79efc58e90d6d assets\nucmatic\models\item\uranium_ore.json
 4173bd01c179fdb39fa50c211e9aa923e7966f96 assets\nucmatic\models\item\reactor_glass.json
 39ee1d664625e4b0bd080cea69fb47ed75bfd5fc assets\nucmatic\blockstates\heu_fuel_rod.json
 d8c8ae58b130d477fc2e013c6c47b9bffd695d56 assets\nucmatic\models\item\hazmat_helmet.json
@@ -13,9 +13,9 @@ dccc52c31303e3e09c6b057843ac55bf0d1b378b assets\nucmatic\models\item\deepslate_u
 78162e504d9de2b93c76c0ac1a9c0c1c3eb7fcb0 assets\nucmatic\models\item\heu_fuel.json
 e4f3a595f3aa7d3f8aeed4241debb91dba83eefe assets\nucmatic\models\block\uranium_ore.json
 520b999dd239aee07e2bb17d80c7a813fda392ee assets\nucmatic\blockstates\reactor_glass.json
-ec8750524f43c2dd1333cf8a4466a67f3cb7ce1e assets\nucmatic\models\block\reactor_glass.json
 4af5ccceb138167bb4b525d2ec36782349580c24 assets\nucmatic\blockstates\leu_fuel_rod.json
 4599b91d5136fa6e43c545176373ed66aacb6eef assets\nucmatic\models\block\leu_fuel_rod.json
+ec8750524f43c2dd1333cf8a4466a67f3cb7ce1e assets\nucmatic\models\block\reactor_glass.json
 be6cde1e62289a441a4bd5539999c772b7323c4b assets\nucmatic\blockstates\reactor_casing.json
 509dd3571faf254a8037ec957cdd2a8bc6c9714c assets\nucmatic\blockstates\uranium_ore.json
 eda35eb4e4b4077eef00465e2a1f1642b3c6d57f assets\nucmatic\models\item\leu_fuel_rod.json
