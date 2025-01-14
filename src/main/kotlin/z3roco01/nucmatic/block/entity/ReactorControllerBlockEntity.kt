@@ -30,5 +30,10 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
     // runs code every tick
     override fun tick(world: World, pos: BlockPos, state: BlockState, blockEntity: EnergyContainer) {
         super.tick(world, pos, state, blockEntity)
+
+        // dont run this logic on the client
+        if(world.isClient) return
+
+
     }
 }
