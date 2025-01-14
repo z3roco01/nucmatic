@@ -11,7 +11,7 @@ import net.minecraft.world.World
  */
 class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
     EnergyContainer(NucmaticBlockEntityTypes.REACTOR_CONTROLLER_TYPE, pos, state) {
-    override fun getEnergyCapacity() = 1024000L
+    override fun getEnergyCapacity() = 256000L
 
     // sets the max insert value for energy to 0, you cannot insert into this
     override fun getMaxIns() = 0L
