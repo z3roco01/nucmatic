@@ -18,6 +18,9 @@ class NucmaticModelProvider(dataOutput: FabricDataOutput): FabricModelProvider(d
         blockStateModelGenerator.registerSimpleCubeAll(NucmaticBlocks.DEEPSLATE_URANIUM_ORE)
         blockStateModelGenerator.registerSimpleCubeAll(NucmaticBlocks.REACTOR_CASING)
         blockStateModelGenerator.registerSimpleCubeAll(NucmaticBlocks.REACTOR_GLASS)
+        blockStateModelGenerator.registerSimpleCubeAll(NucmaticBlocks.NU_FUEL_ROD)
+        blockStateModelGenerator.registerSimpleCubeAll(NucmaticBlocks.LEU_FUEL_ROD)
+        blockStateModelGenerator.registerSimpleCubeAll(NucmaticBlocks.HEU_FUEL_ROD)
     }
 
     override fun generateItemModels(itemModelGenerator: ItemModelGenerator) {

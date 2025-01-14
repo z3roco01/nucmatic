@@ -12,6 +12,7 @@ import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.text.Text
 import z3roco01.nucmatic.Nucmatic
+import z3roco01.nucmatic.block.NucmaticBlocks
 
 /**
  * registration for all the items in this mod
@@ -60,10 +61,19 @@ object NucmaticItems {
         Registry.register(Registries.ITEM_GROUP, NUCMATIC_ITEM_GROUP_KEY, NUCMATIC_ITEM_GROUP)
         // add the items to the group, will be in the specified order
         ItemGroupEvents.modifyEntriesEvent(NUCMATIC_ITEM_GROUP_KEY).register{itemGroup ->
+            itemGroup.add(NucmaticBlocks.URANIUM_ORE)
+            itemGroup.add(NucmaticBlocks.DEEPSLATE_URANIUM_ORE)
             itemGroup.add(RAW_URANIUM)
             itemGroup.add(NU_FUEL)
             itemGroup.add(LEU_FUEL)
             itemGroup.add(HEU_FUEL)
+            itemGroup.add(NucmaticBlocks.NUCLEAR_GENERATOR)
+            itemGroup.add(NucmaticBlocks.NU_FUEL_ROD)
+            itemGroup.add(NucmaticBlocks.LEU_FUEL_ROD)
+            itemGroup.add(NucmaticBlocks.HEU_FUEL_ROD)
+            itemGroup.add(NucmaticBlocks.REACTOR_CONTROLLER)
+            itemGroup.add(NucmaticBlocks.REACTOR_CASING)
+            itemGroup.add(NucmaticBlocks.REACTOR_GLASS)
             itemGroup.add(STEM_CELL)
             itemGroup.add(HAZMAT_HELMET)
             itemGroup.add(HAZMAT_CHESTPLATE)

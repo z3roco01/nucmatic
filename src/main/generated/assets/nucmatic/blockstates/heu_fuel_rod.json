@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "nucmatic:block/heu_fuel_rod"
+    }
+  }
+}

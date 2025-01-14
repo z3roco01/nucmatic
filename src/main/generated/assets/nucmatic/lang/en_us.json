@@ -1,6 +1,12 @@
 {
   "block.nucmatic.deepslate_uranium_ore": "Deepslate Uranium Ore",
+  "block.nucmatic.heu_fuel_rod": "HEU Fuel Rod",
+  "block.nucmatic.leu_fuel_rod": "LEU Fuel Rod",
+  "block.nucmatic.nu_fuel_rod": "NU Fuel Rod",
   "block.nucmatic.nuclear_generator": "Nuclear Generator",
+  "block.nucmatic.reactor_casing": "Reactor Casing",
+  "block.nucmatic.reactor_controller": "Reactor Controller",
+  "block.nucmatic.reactor_glass": "Reactor Glass",
   "block.nucmatic.uranium_ore": "Uranium Ore",
   "effect.nucmatic.radiation_poisoning": "Radiation Poisoning",
   "item.nucmatic.fuel.tooltip": "Energy Remaining",
