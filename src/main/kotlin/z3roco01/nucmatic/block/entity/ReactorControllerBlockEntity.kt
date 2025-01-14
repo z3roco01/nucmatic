@@ -34,6 +34,5 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
         // dont run this logic on the client
         if(world.isClient) return
 
-
     }
 }

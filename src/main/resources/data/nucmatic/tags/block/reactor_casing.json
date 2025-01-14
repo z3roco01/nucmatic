@@ -1,0 +1,7 @@
+{
+  "replace": "false",
+  "values": [
+    "nucmatic:reactor_casing",
+    "nucmatic:reactor_glass"
+  ]
+}
