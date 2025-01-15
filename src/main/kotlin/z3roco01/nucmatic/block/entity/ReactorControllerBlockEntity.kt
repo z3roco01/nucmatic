@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
+import net.minecraft.util.math.Vec3i
 import net.minecraft.world.World
 import z3roco01.nucmatic.Nucmatic
 import z3roco01.nucmatic.tag.NucmaticBlockTags
@@ -38,9 +39,51 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
         // dont run this logic on the client
         if(world.isClient) return
 
-        val asd = findDirection(world, pos)
-        if(asd != Axis.NONE)
-            Nucmatic.LOGGER.info(asd.toString())
+        // the axis that the front wall is built on
+        val firstAxis= findDirection(world, pos)
+        val otherAxis = if(firstAxis == Axis.X) Axis.Z else Axis.X
+        val extends = findWallExtends(world, pos, firstAxis, true)
+        val secondExtends = findWallExtends(world, pos.add(firstAxis.vector.multiply(extends[0])), otherAxis, false)
+        val height = findWallExtends(world, pos, Axis.Y, false)
+    }
+
+    /**
+     * method that finds how much a wall extends out on an axis from the starting position
+     * @param world the [World] this is running in
+     * @param pos the starting [BlockPos]
+     * @param axis the [Axis] to traverse
+     * @param subtract should 1 be subtracted from each element ( if we are starting in the middle
+     * @return an int array, the first element is the positive axis, the second is the negative
+     */
+    private fun findWallExtends(world: World, pos: BlockPos, axis: Axis, subtract: Boolean): IntArray {
+        // should start from a block that has the reactor casing tag or it wont work
+        var state = world.getBlockState(pos)
+        var curPos = pos
+
+        // first element is in the positive, second in the negative
+        // -1 since it does count the reactor block
+        var extends = if(subtract) intArrayOf(-1, -1) else intArrayOf(0, 0)
+
+        while(state.isIn(NucmaticBlockTags.REACTOR_CASING)) {
+            extends[0]++
+            curPos = curPos.add(axis.vector)
+            state = world.getBlockState(curPos)
+        }
+
+        state = world.getBlockState(pos)
+        curPos = pos
+
+        while(state.isIn(NucmaticBlockTags.REACTOR_CASING)) {
+            extends[1]++
+            curPos = curPos.subtract(axis.vector)
+            state = world.getBlockState(curPos)
+        }
+
+        Nucmatic.LOGGER.info("")
+        Nucmatic.LOGGER.info(extends[0].toString())
+        Nucmatic.LOGGER.info(extends[1].toString())
+
+        return extends
     }
 
     /**
@@ -50,23 +93,20 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
      * @return the [Axis] the front wall is on, or [Axis.NONE] if it is not built
      */
     private fun findDirection(world: World, pos: BlockPos): Axis {
-        val xPlus = isInAddedPos(world, pos, 1, 0, 0, NucmaticBlockTags.REACTOR_CASING)
-        val xMinus = isInAddedPos(world, pos, -1, 0, 0, NucmaticBlockTags.REACTOR_CASING)
-        val zPlus = isInAddedPos(world, pos, 0, 0, 1, NucmaticBlockTags.REACTOR_CASING)
-        val zMinus = isInAddedPos(world, pos, 0, 0, -1, NucmaticBlockTags.REACTOR_CASING)
-
-        if(xPlus != null && xMinus != null && xPlus && xMinus)
+        if(isInAddedPos(world, pos, 1, 0, 0, NucmaticBlockTags.REACTOR_CASING) &&
+            isInAddedPos(world, pos, -1, 0, 0, NucmaticBlockTags.REACTOR_CASING))
             // if true the front wall is built on the x axis
-            return Axis.X_AXIS
-        else if(zPlus != null && zMinus != null && zPlus && zMinus)
+            return Axis.X
+        else if(isInAddedPos(world, pos, 0, 0, 1, NucmaticBlockTags.REACTOR_CASING) &&
+            isInAddedPos(world, pos, 0, 0, -1, NucmaticBlockTags.REACTOR_CASING))
             // if true the front wall is built on the z axis
-            return Axis.Z_AXIS
+            return Axis.Z
 
         return Axis.NONE
     }
 
     /**
-     * first runs [getBlockEntAdd] with [pos] and [x] [y] [z], then returns if it is in [tag]
+     * first runs [getBlockStateAdd] with [pos] and [x] [y] [z], then returns if it is in [tag]
      * @param world the [World] this is run in
      * @param pos the [BlockPos] we are adding to
      * @param x the value to be added to the x component
@@ -75,26 +115,28 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
      * @param tag the tag we are checking against
      */
     private fun isInAddedPos(world: World, pos: BlockPos, x: Int, y: Int, z: Int, tag: TagKey<Block>) =
-        getBlockEntAdd(world, pos, x, y, z)?.cachedState?.isIn(tag)
+        getBlockStateAdd(world, pos, x, y, z).isIn(tag)
 
     /**
-     * adds the supplied ints to the pos, then gets the block entity at that position
+     * adds the supplied ints to the pos, then gets the block state at that position
      * @param world the [World] this is run in
      * @param pos the [BlockPos] we are adding to
      * @param x the value to be added to the x component
      * @param y the value to be added to the y component
      * @param z the value to be added to the z component
+     * @return the [BlockState] at the newly added position
      */
-    private fun getBlockEntAdd(world: World, pos: BlockPos, x: Int, y: Int, z: Int) =
-        world.getBlockEntity(pos.add(x, y, z))
+    private fun getBlockStateAdd(world: World, pos: BlockPos, x: Int, y: Int, z: Int) =
+        world.getBlockState(pos.add(x, y, z))
 
     /**
      * a class used for returns, used to denote an axis in world
+     * @param vector the vector for this axis to be used in math
      */
-    private enum class Axis {
-        X_AXIS,
-        Y_AXIS,
-        Z_AXIS,
-        NONE
+    private enum class Axis(val vector: Vec3i) {
+        X(Vec3i(1, 0, 0)),
+        Y(Vec3i(0, 1, 0)),
+        Z(Vec3i(0, 0, 1)),
+        NONE(Vec3i.ZERO)
     }
 }
