@@ -1,5 +1,5 @@
 {
-  "replace": "false",
+  "replace": false,
   "values": [
     "nucmatic:nu_fuel_rod",
     "nucmatic:leu_fuel_rod",
