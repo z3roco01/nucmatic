@@ -45,10 +45,12 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
      */
     fun check(world: World, pos: BlockPos) {
         // the axis that the front wall is built on
-        val firstAxis= findDirection(world, pos)
-        val otherAxis = if(firstAxis == Axis.X) Axis.Z else Axis.X
-        val extends = findWallExtends(world, pos, firstAxis, true)
-        val secondExtends = findWallExtends(world, pos.add(firstAxis.vector.multiply(extends[0])), otherAxis, false)
+        Nucmatic.LOGGER.info("")
+        val frontBackAxis= findDirection(world, pos)
+        val leftRightAxis = if(frontBackAxis == Axis.X) Axis.Z else Axis.X
+        val frontWallExtends = findWallExtends(world, pos, frontBackAxis, true)
+        Nucmatic.LOGGER.info(pos.add(frontBackAxis.vector.multiply(frontWallExtends.positive)).toString())
+        val secondExtends = findWallExtends(world, pos.add(frontBackAxis.vector.multiply(frontWallExtends.positive)), leftRightAxis, false)
         val height = findWallExtends(world, pos, Axis.Y, false)
 
     }
@@ -59,19 +61,18 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
      * @param pos the starting [BlockPos]
      * @param axis the [Axis] to traverse
      * @param subtract should 1 be subtracted from each element ( if we are starting in the middle
-     * @return an int array, the first element is the positive axis, the second is the negative
+     * @return an [Extend] holding how many blocks it extends
      */
-    private fun findWallExtends(world: World, pos: BlockPos, axis: Axis, subtract: Boolean): IntArray {
+    private fun findWallExtends(world: World, pos: BlockPos, axis: Axis, subtract: Boolean): Extend {
         // should start from a block that has the reactor casing tag or it wont work
         var state = world.getBlockState(pos)
         var curPos = pos
 
-        // first element is in the positive, second in the negative
-        // -1 since it does count the reactor block
-        var extends = if(subtract) intArrayOf(-1, -1) else intArrayOf(0, 0)
+        // option for -1 since it does count the starting block
+        var extend = if(subtract) Extend(-1, -1, axis) else Extend(axis)
 
         while(state.isIn(NucmaticBlockTags.REACTOR_CASING)) {
-            extends[0]++
+            extend.positive++
             curPos = curPos.add(axis.vector)
             state = world.getBlockState(curPos)
         }
@@ -80,21 +81,19 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
         curPos = pos
 
         while(state.isIn(NucmaticBlockTags.REACTOR_CASING)) {
-            extends[1]++
+            extend.negative++
             curPos = curPos.subtract(axis.vector)
             state = world.getBlockState(curPos)
         }
 
-        Nucmatic.LOGGER.info("")
-        Nucmatic.LOGGER.info(extends[0].toString())
-        Nucmatic.LOGGER.info(extends[1].toString())
+        Nucmatic.LOGGER.info(extend.toString())
 
-        return extends
+        return extend
     }
 
     /**
      * finds which direction the reactor is built in, since it could be built any way
-     * @param world [World] that this is runing in
+     * @param world [World] that this is running in
      * @param pos the [BlockPos] that this is starting from
      * @return the [Axis] the front wall is on, or [Axis.NONE] if it is not built
      */
@@ -144,5 +143,18 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
         Y(Vec3i(0, 1, 0)),
         Z(Vec3i(0, 0, 1)),
         NONE(Vec3i.ZERO)
+    }
+
+    /**
+     * a class to hold an extend, used in multiblock detection
+     * @param negative how many blocks does it extend in the negative
+     * @param positive how many block does it extend in the positive
+     * @param axis a [Axis], what axis are we extending along
+     */
+    private class Extend(var negative: Int, var positive: Int, var axis: Axis) {
+        constructor(axis: Axis) : this(0, 0, axis)
+        constructor(): this(0, 0, Axis.NONE)
+
+        override fun toString() = "$axis-$negative $axis$positive"
     }
 }
