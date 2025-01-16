@@ -38,13 +38,19 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
 
         // dont run this logic on the client
         if(world.isClient) return
+    }
 
+    /**
+     * testing method, runs the multiblock structure checking code
+     */
+    fun check(world: World, pos: BlockPos) {
         // the axis that the front wall is built on
         val firstAxis= findDirection(world, pos)
         val otherAxis = if(firstAxis == Axis.X) Axis.Z else Axis.X
         val extends = findWallExtends(world, pos, firstAxis, true)
         val secondExtends = findWallExtends(world, pos.add(firstAxis.vector.multiply(extends[0])), otherAxis, false)
         val height = findWallExtends(world, pos, Axis.Y, false)
+
     }
 
     /**
