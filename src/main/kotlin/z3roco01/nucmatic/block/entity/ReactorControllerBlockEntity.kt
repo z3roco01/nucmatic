@@ -44,15 +44,56 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
      * testing method, runs the multiblock structure checking code
      */
     fun check(world: World, pos: BlockPos) {
-        // the axis that the front wall is built on
         Nucmatic.LOGGER.info("")
+        // the axis that the front and back walls are built on
         val frontBackAxis= findDirection(world, pos)
+        // axis that the left and right are on
         val leftRightAxis = if(frontBackAxis == Axis.X) Axis.Z else Axis.X
+
+        // measures the lengths beside the reactor like this
+        // X---XRX---X
         val frontWallExtends = findWallExtends(world, pos, frontBackAxis, true)
-        Nucmatic.LOGGER.info(pos.add(frontBackAxis.vector.multiply(frontWallExtends.positive)).toString())
+        // measures one of the side walls ( reactors must be square )
         val secondExtends = findWallExtends(world, pos.add(frontBackAxis.vector.multiply(frontWallExtends.positive)), leftRightAxis, false)
+        // measures the height ( reactors must be the same height all around )
         val height = findWallExtends(world, pos, Axis.Y, false)
 
+        var valid = true
+
+        frontWallExtends.positive++
+
+        Nucmatic.LOGGER.info(checkWall(world, pos.subtract(frontBackAxis.vector.multiply(frontWallExtends.negative)),
+            frontWallExtends, frontBackAxis, height.positive).toString())
+    }
+
+    /**
+     * method that checks if a wall is made of reactor blocks
+     * @param world the [World] this is being run in
+     * @param pos the [BlockPos] to start checking from
+     * @param extend the [Extend] holding the wall size
+     * @param axis the [Axis] this wall is on
+     * @param height the height of the wall
+     * @return true if the wall is all reactor blocks, false otherwise
+     */
+    private fun checkWall(world: World, pos: BlockPos, extend: Extend, axis: Axis, height: Int): Boolean {
+        // variable holding if the wall is all reactors
+        var valid = false
+
+        // loop over each y value
+        for(y in 0..<height) {
+            // and each block in that y
+            for(v in 0..<extend.total()) {
+                // if its on the x use the v as x
+                if(axis == Axis.X)
+                    valid = isInAddedPos(world, pos, v, y, 0, NucmaticBlockTags.REACTOR_CASING)
+                else if (axis == Axis.Z) // and if its on z use the v as z
+                    valid = isInAddedPos(world, pos, 0, y, v, NucmaticBlockTags.REACTOR_CASING)
+                else // should not happen, but if it does make the wall invalid
+                    valid = false
+            }
+        }
+
+        return valid
     }
 
     /**
@@ -71,22 +112,23 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
         // option for -1 since it does count the starting block
         var extend = if(subtract) Extend(-1, -1, axis) else Extend(axis)
 
+        // check in the positive direction for matching blocks
         while(state.isIn(NucmaticBlockTags.REACTOR_CASING)) {
             extend.positive++
             curPos = curPos.add(axis.vector)
             state = world.getBlockState(curPos)
         }
 
+        // reset the loop vars
         state = world.getBlockState(pos)
         curPos = pos
 
+        // now check in the negative direction
         while(state.isIn(NucmaticBlockTags.REACTOR_CASING)) {
             extend.negative++
             curPos = curPos.subtract(axis.vector)
             state = world.getBlockState(curPos)
         }
-
-        Nucmatic.LOGGER.info(extend.toString())
 
         return extend
     }
@@ -154,6 +196,12 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
     private class Extend(var negative: Int, var positive: Int, var axis: Axis) {
         constructor(axis: Axis) : this(0, 0, axis)
         constructor(): this(0, 0, Axis.NONE)
+
+        /**
+         * sums up [positive] and [negative] then returns it
+         * @return returns [positive] plus [negative]
+         */
+        fun total() = positive + negative
 
         override fun toString() = "$axis-$negative $axis$positive"
     }
