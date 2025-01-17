@@ -31,6 +31,8 @@ class ReactorControllerBlock: BlockWithEntity(Settings.create()) {
 
     override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hit: BlockHitResult):
             ActionResult {
+        if(world.isClient) return ActionResult.PASS
+
         val entity = world.getBlockEntity(pos)
 
         if(entity is ReactorControllerBlockEntity)

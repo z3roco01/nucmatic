@@ -63,7 +63,7 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
         frontWallExtends.positive++
 
         Nucmatic.LOGGER.info(checkWall(world, pos.subtract(frontBackAxis.vector.multiply(frontWallExtends.negative)),
-            frontWallExtends, frontBackAxis, height.positive).toString())
+            frontWallExtends.max(), height.positive, frontBackAxis).toString())
     }
 
     /**
@@ -75,14 +75,14 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
      * @param height the height of the wall
      * @return true if the wall is all reactor blocks, false otherwise
      */
-    private fun checkWall(world: World, pos: BlockPos, extend: Extend, axis: Axis, height: Int): Boolean {
+    private fun checkWall(world: World, pos: BlockPos, length: Int, height: Int, axis: Axis): Boolean {
         // variable holding if the wall is all reactors
         var valid = false
 
         // loop over each y value
         for(y in 0..<height) {
             // and each block in that y
-            for(v in 0..<extend.total()) {
+            for(v in 0..<length) {
                 // if its on the x use the v as x
                 if(axis == Axis.X)
                     valid = isInAddedPos(world, pos, v, y, 0, NucmaticBlockTags.REACTOR_CASING)
@@ -202,6 +202,12 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
          * @return returns [positive] plus [negative]
          */
         fun total() = positive + negative
+
+        /**
+         * returns the largest of positive and negative
+         * @return either positive or negative, whichever is larger
+         */
+        fun max() = kotlin.math.max(positive, negative)
 
         override fun toString() = "$axis-$negative $axis$positive"
     }
