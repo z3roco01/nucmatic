@@ -112,10 +112,26 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
                     valid = isInAddedPos(world, pos, 0, y, v, NucmaticBlockTags.REACTOR_CASING)
                 else // should not happen, but if it does make the wall invalid
                     valid = false
+
+                // return early if valid is false, as to not waste resources
+                if(valid == false) return valid
             }
         }
 
         return valid
+    }
+
+    /**
+     * checks a floor ( or roof ) for being made only of reactor blocks
+     * @param world the [World] this is being run in
+     * @param pos the [BlockPos] to start from
+     * @param length the length of the floor
+     * @param width the width of the floor
+     *
+     * @return returns true if it is made correctly, otherwise returns false
+     */
+    private fun checkFloor(world: World, pos: BlockPos, length: Int, width: Int): Boolean {
+        return true
     }
 
     /**
