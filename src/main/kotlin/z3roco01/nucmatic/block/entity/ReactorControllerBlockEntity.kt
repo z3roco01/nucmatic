@@ -4,7 +4,6 @@ import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3i
 import net.minecraft.world.World
 import z3roco01.nucmatic.Nucmatic
@@ -66,13 +65,16 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
         // since it doesnt count the reactor we need to add one ( would add 2 if we counted the reactor in the counting method )
         frontWallExtends.positive++
         // check the front wall
-        //valid = checkWall(world, frontWallStart, frontWallExtends.max(), height.positive, frontBackAxis)
-        //Nucmatic.LOGGER.info(valid.toString())
+        valid = checkWall(world, frontWallStart, frontWallExtends.total(), height.positive, frontBackAxis,
+        Direction.POS)
         // check the wall closer to the negative side of the front wall
-        valid = checkWall(world, frontWallStart, sideWallExtends.max(), height.positive, sideWallAxis,
-            sideWallExtends.maxDir())
-        Nucmatic.LOGGER.info("${sideWallExtends.toString()}")
-        Nucmatic.LOGGER.info("${sideWallExtends.maxDir()} ${sideWallExtends.max()}")
+        valid = valid && checkWall(world, frontWallStart, height.positive, sideWallExtends)
+        // check the other sidewall, which is spaced one front wall apart from the other wall
+        valid = valid && checkWall(world, frontWallStart.add(frontBackAxis.vector.multiply(frontWallExtends.total()-1)),
+            sideWallExtends.max(), height.positive, sideWallAxis, sideWallExtends.maxDir())
+        // finally check the back wall, which is behind the front wall by one side wall-1
+        valid = valid && checkWall(world, frontWallStart.subtract(sideWallAxis.vector.multiply(sideWallExtends.max()-1)),
+            frontWallExtends.total(), height.positive, frontBackAxis, Direction.POS)
         Nucmatic.LOGGER.info(valid.toString())
     }
 
@@ -86,24 +88,23 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
      * method that checks if a wall is made of reactor blocks
      * @param world the [World] this is being run in
      * @param pos the [BlockPos] to start checking from
-     * @param extend the [Extend] holding the wall size
+     * @param length the length of the wall to check
      * @param axis the [Axis] this wall is on
      * @param height the height of the wall
      * @param direction the [Direction] the wall is going in
      * @return true if the wall is all reactor blocks, false otherwise
      */
     private fun checkWall(world: World, pos: BlockPos, length: Int, height: Int, axis: Axis,
-                          direction: ReactorControllerBlockEntity.Direction): Boolean {
+                          direction: Direction): Boolean {
         // variable holding if the wall is all reactors
         var valid = false
-        val xRange = if(direction == ReactorControllerBlockEntity.Direction.POS) (0..<length)
+        val xRange = if(direction == Direction.POS) (0..<length)
         else (-(length-1)..0)
 
         // loop over each y value
         for(y in 0..<height) {
             // and each block in that y
             for(v in xRange) {
-                Nucmatic.LOGGER.info(pos.add(v, y, 0).toString())
                 // if its on the x use the v as x
                 if(axis == Axis.X)
                     valid = isInAddedPos(world, pos, v, y, 0, NucmaticBlockTags.REACTOR_CASING)
@@ -242,9 +243,9 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
          * returns which direction the [max] value is in
          * @return the [Direction] of the value returned from max
          */
-        fun maxDir(): ReactorControllerBlockEntity.Direction {
-            if(max() == positive) return ReactorControllerBlockEntity.Direction.POS
-            else return ReactorControllerBlockEntity.Direction.NEG
+        fun maxDir(): Direction {
+            if(max() == positive) return Direction.POS
+            else return Direction.NEG
         }
 
         override fun toString() = "$axis-$negative $axis$positive"
