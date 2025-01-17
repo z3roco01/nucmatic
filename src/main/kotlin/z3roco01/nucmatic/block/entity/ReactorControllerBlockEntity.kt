@@ -8,6 +8,7 @@ import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3i
 import net.minecraft.world.World
 import z3roco01.nucmatic.Nucmatic
+import z3roco01.nucmatic.block.entity.ReactorControllerBlockEntity.Axis
 import z3roco01.nucmatic.tag.NucmaticBlockTags
 
 /**
@@ -26,7 +27,7 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
 
     init {
         // loop over every direction ...
-        for(i in Direction.entries) {
+        for(i in net.minecraft.util.math.Direction.entries) {
             // and set its io permission to extract only
             sideIOMap[i] = IOPermission.EXTRACT
         }
@@ -48,23 +49,38 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
         // the axis that the front and back walls are built on
         val frontBackAxis= findDirection(world, pos)
         // axis that the left and right are on
-        val leftRightAxis = if(frontBackAxis == Axis.X) Axis.Z else Axis.X
+        val sideWallAxis = if(frontBackAxis == Axis.X) Axis.Z else Axis.X
 
         // measures the lengths beside the reactor like this
         // X---XRX---X
         val frontWallExtends = findWallExtends(world, pos, frontBackAxis, true)
         // measures one of the side walls ( reactors must be square )
-        val secondExtends = findWallExtends(world, pos.add(frontBackAxis.vector.multiply(frontWallExtends.positive)), leftRightAxis, false)
+        val sideWallExtends = findWallExtends(world, pos.add(frontBackAxis.vector.multiply(frontWallExtends.positive)), sideWallAxis, false)
         // measures the height ( reactors must be the same height all around )
         val height = findWallExtends(world, pos, Axis.Y, false)
 
         var valid = true
+        // subtracts half of the front walls lenght, on the correct axis so that we start from one side
+        val frontWallStart = pos.subtract(frontBackAxis.vector.multiply(frontWallExtends.negative))
 
+        // since it doesnt count the reactor we need to add one ( would add 2 if we counted the reactor in the counting method )
         frontWallExtends.positive++
-
-        Nucmatic.LOGGER.info(checkWall(world, pos.subtract(frontBackAxis.vector.multiply(frontWallExtends.negative)),
-            frontWallExtends.max(), height.positive, frontBackAxis).toString())
+        // check the front wall
+        //valid = checkWall(world, frontWallStart, frontWallExtends.max(), height.positive, frontBackAxis)
+        //Nucmatic.LOGGER.info(valid.toString())
+        // check the wall closer to the negative side of the front wall
+        valid = checkWall(world, frontWallStart, sideWallExtends.max(), height.positive, sideWallAxis,
+            sideWallExtends.maxDir())
+        Nucmatic.LOGGER.info("${sideWallExtends.toString()}")
+        Nucmatic.LOGGER.info("${sideWallExtends.maxDir()} ${sideWallExtends.max()}")
+        Nucmatic.LOGGER.info(valid.toString())
     }
+
+    /**
+     * simpiler version of [checkWall], doesnt take in direction, height or axis, and instead takes in an [Extend]
+     */
+    private fun checkWall(world: World, pos: BlockPos, height: Int, extend: Extend) =
+        checkWall(world, pos, extend.max(), height, extend.axis, extend.maxDir())
 
     /**
      * method that checks if a wall is made of reactor blocks
@@ -73,16 +89,21 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
      * @param extend the [Extend] holding the wall size
      * @param axis the [Axis] this wall is on
      * @param height the height of the wall
+     * @param direction the [Direction] the wall is going in
      * @return true if the wall is all reactor blocks, false otherwise
      */
-    private fun checkWall(world: World, pos: BlockPos, length: Int, height: Int, axis: Axis): Boolean {
+    private fun checkWall(world: World, pos: BlockPos, length: Int, height: Int, axis: Axis,
+                          direction: ReactorControllerBlockEntity.Direction): Boolean {
         // variable holding if the wall is all reactors
         var valid = false
+        val xRange = if(direction == ReactorControllerBlockEntity.Direction.POS) (0..<length)
+        else (-(length-1)..0)
 
         // loop over each y value
         for(y in 0..<height) {
             // and each block in that y
-            for(v in 0..<length) {
+            for(v in xRange) {
+                Nucmatic.LOGGER.info(pos.add(v, y, 0).toString())
                 // if its on the x use the v as x
                 if(axis == Axis.X)
                     valid = isInAddedPos(world, pos, v, y, 0, NucmaticBlockTags.REACTOR_CASING)
@@ -188,6 +209,14 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
     }
 
     /**
+     * a class used for passing positions, stores if it is in the negative or positive
+     */
+    private enum class Direction() {
+        POS,
+        NEG
+    }
+
+    /**
      * a class to hold an extend, used in multiblock detection
      * @param negative how many blocks does it extend in the negative
      * @param positive how many block does it extend in the positive
@@ -208,6 +237,15 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
          * @return either positive or negative, whichever is larger
          */
         fun max() = kotlin.math.max(positive, negative)
+
+        /**
+         * returns which direction the [max] value is in
+         * @return the [Direction] of the value returned from max
+         */
+        fun maxDir(): ReactorControllerBlockEntity.Direction {
+            if(max() == positive) return ReactorControllerBlockEntity.Direction.POS
+            else return ReactorControllerBlockEntity.Direction.NEG
+        }
 
         override fun toString() = "$axis-$negative $axis$positive"
     }
