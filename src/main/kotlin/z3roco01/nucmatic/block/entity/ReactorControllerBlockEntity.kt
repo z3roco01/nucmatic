@@ -59,7 +59,7 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
         val height = findWallExtends(world, pos, Axis.Y, false)
 
         var valid = true
-        // subtracts half of the front walls lenght, on the correct axis so that we start from one side
+        // subtracts half of the front walls length, on the correct axis so that we start from one side
         val frontWallStart = pos.subtract(frontBackAxis.vector.multiply(frontWallExtends.negative))
 
         // since it doesnt count the reactor we need to add one ( would add 2 if we counted the reactor in the counting method )
@@ -75,11 +75,21 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
         // finally check the back wall, which is behind the front wall by one side wall-1
         valid = valid && checkWall(world, frontWallStart.subtract(sideWallAxis.vector.multiply(sideWallExtends.max()-1)),
             frontWallExtends.total(), height.positive, frontBackAxis, Direction.POS)
+
+        Nucmatic.LOGGER.info(valid.toString())
+
+        // the start of the floor/roof first goes down by a block, then in on both axis in the right direction
+        val floorStart = frontWallStart.add(0, -1, 0).subtract(sideWallAxis.vector
+            .multiply(sideWallExtends.maxDir().mul)).add(frontBackAxis.vector.multiply(Direction.POS.mul))
+
+        // check the floor
+        valid = valid && checkFloor(world, floorStart, frontWallExtends.total(), sideWallExtends.max(),
+            frontBackAxis, Direction.POS, sideWallExtends.maxDir())
         Nucmatic.LOGGER.info(valid.toString())
     }
 
     /**
-     * simpiler version of [checkWall], doesnt take in direction, height or axis, and instead takes in an [Extend]
+     * simpler version of [checkWall], doesnt take in direction, height or axis, and instead takes in an [Extend]
      */
     private fun checkWall(world: World, pos: BlockPos, height: Int, extend: Extend) =
         checkWall(world, pos, extend.max(), height, extend.axis, extend.maxDir())
@@ -98,20 +108,19 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
                           direction: Direction): Boolean {
         // variable holding if the wall is all reactors
         var valid = false
-        val xRange = if(direction == Direction.POS) (0..<length)
-        else (-(length-1)..0)
+        val xRange = direction.createRange(0, length)
 
         // loop over each y value
         for(y in 0..<height) {
             // and each block in that y
             for(v in xRange) {
                 // if its on the x use the v as x
-                if(axis == Axis.X)
-                    valid = isInAddedPos(world, pos, v, y, 0, NucmaticBlockTags.REACTOR_CASING)
+                valid = if(axis == Axis.X)
+                    isInAddedPos(world, pos, v, y, 0, NucmaticBlockTags.REACTOR_CASING)
                 else if (axis == Axis.Z) // and if its on z use the v as z
-                    valid = isInAddedPos(world, pos, 0, y, v, NucmaticBlockTags.REACTOR_CASING)
+                    isInAddedPos(world, pos, 0, y, v, NucmaticBlockTags.REACTOR_CASING)
                 else // should not happen, but if it does make the wall invalid
-                    valid = false
+                    false
 
                 // return early if valid is false, as to not waste resources
                 if(valid == false) return valid
@@ -127,11 +136,38 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
      * @param pos the [BlockPos] to start from
      * @param length the length of the floor
      * @param width the width of the floor
+     * @param lengthAxis the [Axis] the length is on, the width is put on the other axis ( either x or y )
+     * @param lengthDir the [Direction] the length goes in
+     * @param widthDir the [Direction] the width goes in
      *
      * @return returns true if it is made correctly, otherwise returns false
      */
-    private fun checkFloor(world: World, pos: BlockPos, length: Int, width: Int): Boolean {
-        return true
+    private fun checkFloor(world: World, pos: BlockPos, length: Int, width: Int, lengthAxis: Axis,
+                           lengthDir: Direction, widthDir: Direction): Boolean {
+        // assume valid till a improper block is found
+        var valid = true
+        // create the ranges to loop over for length and width
+        val lenRange = lengthDir.createRange(0, length)
+        val widRange = widthDir.createRange(0, width)
+
+        for(len in lenRange) {
+            for(wid in widRange) {
+
+                valid = if(lengthAxis == Axis.X) {
+                    Nucmatic.LOGGER.info(pos.add(len, 0, wid).toString())
+                    isInAddedPos(world, pos, len, 0, wid, NucmaticBlockTags.REACTOR_CASING)
+                }else if(lengthAxis == Axis.Z) {
+                    Nucmatic.LOGGER.info(pos.add(wid, 0, len).toString())
+                    isInAddedPos(world, pos, wid, 0, len, NucmaticBlockTags.REACTOR_CASING)
+                }else // should not happen, if it does then make it invalid
+                    false
+
+                // if valid is false, return early
+                if(valid == false) return valid
+            }
+        }
+
+        return valid
     }
 
     /**
@@ -227,10 +263,19 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
 
     /**
      * a class used for passing positions, stores if it is in the negative or positive
+     * @param mul used to multiply number so it will be negative or positive
      */
-    private enum class Direction() {
-        POS,
-        NEG
+    private enum class Direction(val mul: Int) {
+        POS(1),
+        NEG(-1);
+
+        /**
+         * creates an [IntRange] for 2 values that starts at the proper number to go in its direction
+         * @param min the min value of the range
+         * @param max the max value of the range
+         */
+        fun createRange(min: Int, max: Int) = if(this == Direction.POS) (min..<max)
+        else (-(max-1)..<min)
     }
 
     /**
