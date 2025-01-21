@@ -79,13 +79,15 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
         Nucmatic.LOGGER.info(valid.toString())
 
         // the start of the floor/roof first goes down by a block, then in on both axis in the right direction
-        val floorStart = frontWallStart.add(0, -1, 0).subtract(sideWallAxis.vector
+        val floorStart = frontWallStart.add(0, -1, 0).add(sideWallAxis.vector
             .multiply(sideWallExtends.maxDir().mul)).add(frontBackAxis.vector.multiply(Direction.POS.mul))
 
         // check the floor
         valid = valid && checkFloor(world, floorStart, frontWallExtends.total(), sideWallExtends.max(),
             frontBackAxis, Direction.POS, sideWallExtends.maxDir())
         Nucmatic.LOGGER.info(valid.toString())
+        Nucmatic.LOGGER.info(sideWallAxis.vector.multiply(sideWallExtends.maxDir().mul).toString())
+        Nucmatic.LOGGER.info(floorStart.toString())
     }
 
     /**
@@ -275,7 +277,7 @@ class ReactorControllerBlockEntity(pos: BlockPos, state: BlockState):
          * @param max the max value of the range
          */
         fun createRange(min: Int, max: Int) = if(this == Direction.POS) (min..<max)
-        else (-(max-1)..<min)
+        else (-(max-1)..min)
     }
 
     /**
