@@ -3,6 +3,7 @@
   "package": "z3roco01.nucmatic.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "TntEntityAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
